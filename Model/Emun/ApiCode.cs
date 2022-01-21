@@ -18,7 +18,11 @@ namespace Model.Emun
         [Description("失败")]
         Faild = 500,
 
+        [Description("账号不能为空")]
+        CantEmptyLoginName = 401001,
+        [Description("密码不能为空")]
+        CantEmptyPassword = 401002,
         [Description("账号或密码错误")]
-        WrongUser = 401001,
+        WrongPassword = 401003,
     }
 }

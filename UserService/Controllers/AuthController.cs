@@ -27,15 +27,21 @@ namespace UserService.Controllers
         [HttpPost]
         public async Task<ApiResponse> Authenticate(LoginInput dto)
         {
+            if (string.IsNullOrEmpty(dto.LoginName))
+                return GetResponse(ApiCode.CantEmptyLoginName);
+            if (string.IsNullOrEmpty(dto.Password))
+                return GetResponse(ApiCode.CantEmptyPassword);
             var user = await _Db.User.Where(w => !w.IsDeleted && w.LoginName == dto.LoginName && w.Password == dto.Password.MD5Encrypt(32)).FirstOrDefaultAsync();
             if (user == null)
-                return GetResponse(ApiCode.WrongUser);
-
-
-            //生成jwt令牌
+                return GetResponse(ApiCode.WrongPassword);
             return Success(await GenerateToken(user));
         }
 
+        /// <summary>
+        /// 生成jwt令牌
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private async Task<string> GenerateToken(User user)
         {
             var dic = (await HttpHelper.Get<ApiResponse<List<DM.Dictionary>>>(ConstValue.GatewayUrl + "Dictionary/Get?Type=JwtConfig")).Data.FirstOrDefault();
