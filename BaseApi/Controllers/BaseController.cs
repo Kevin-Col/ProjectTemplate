@@ -8,7 +8,7 @@ using Model.OutputDto;
 
 namespace BaseApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class BaseController : ControllerBase
     {

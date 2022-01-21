@@ -1,12 +1,16 @@
+using BaseApi.Filter;
 using Common;
 using DB;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+//关闭自动验证
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+//启用自定义参数验证过滤器
+builder.Services.AddControllers(option => option.Filters.Add<InputDtoValidFilter>());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -14,7 +18,7 @@ builder.Services.AddSwaggerGen();
 //Microsoft.EntityFrameworkCore (5.0.1 1)
 //Pomelo.EntityFrameworkCore.MySql(5.0.2)
 builder.Services.AddDbContext<Context>(option => option.UseMySql("server=rm-bp1gsig2xii7jj3126o.mysql.rds.aliyuncs.com;userid=sa;password=kevin888;database=test;", MySqlServerVersion.LatestSupportedServerVersion));
-object p = builder.Services.AddAutoMapper(typeof(DtoMapProfile));
+builder.Services.AddAutoMapper(typeof(DtoMapProfile));
 
 var app = builder.Build();
 
