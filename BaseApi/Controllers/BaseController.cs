@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Model.Emun;
-using Model.OutputDto;
+﻿using AutoMapper;
 using Common;
 using Common.Attributes;
 using DB;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Model.Emun;
+using Model.OutputDto;
 
-namespace UserService.Controllers
+namespace BaseApi.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BaseController : ControllerBase
     {
@@ -22,6 +22,5 @@ namespace UserService.Controllers
         protected ApiResponse<T> Faild<T>(T data) => GetResponse(ApiCode.Faild, ApiCode.Faild.GetDesc(), data);
 
         protected ApiResponse<T> GetResponse<T>(ApiCode code, string? msg, T data) => new ApiResponse<T>(code, msg ?? code.GetDesc(), data);
-
     }
 }
