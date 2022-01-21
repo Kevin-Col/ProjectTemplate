@@ -1,0 +1,2 @@
+添加迁移 add-migration xxxx
+执行迁移 update-migration

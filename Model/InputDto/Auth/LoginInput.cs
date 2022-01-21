@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model.DBModel
+namespace Model.InputDto.Auth
 {
-    public class User : BaseModel
+    public class LoginInput
     {
-        public string NickName { get; set; }
         public string LoginName { get; set; }
         public string Password { get; set; }
-        //public List<Dictionary> dics { get; set; }
-        //public Dictionary dic { get; set; }
     }
 }
