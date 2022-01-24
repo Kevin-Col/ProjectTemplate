@@ -2,6 +2,7 @@
 using Common;
 using Common.Attributes;
 using DB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Emun;
 using Model.OutputDto;
@@ -10,9 +11,10 @@ namespace BaseApi.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class BaseController : ControllerBase
     {
-        [FromService] public Context _Db { get; set; }
+        [FromService] public Context _Context { get; set; }
         [FromService] public IMapper _Mapper { get; set; }
         protected ApiResponse Success() => Success("");
         protected ApiResponse Faild() => Faild("");

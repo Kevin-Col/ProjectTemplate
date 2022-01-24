@@ -15,9 +15,11 @@ using System.Security.Claims;
 using System.Text;
 using DM = Model.DBModel;
 using DB;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserService.Controllers
 {
+    [AllowAnonymous]
     public class AuthController : BaseController
     {
         private readonly IConfiguration _configuration;
@@ -33,7 +35,7 @@ namespace UserService.Controllers
             if (string.IsNullOrEmpty(dto.Password))
                 return GetResponse(ApiCode.CantEmptyPassword);
 
-            var user = await _Db.User.Where(w => w.LoginName == dto.LoginName && w.Password == dto.Password.MD5Encrypt(32)).FirstOrDefaultAsync();
+            var user = await _Context.User.Where(w => w.LoginName == dto.LoginName && w.Password == dto.Password.MD5Encrypt(32)).FirstOrDefaultAsync();
             if (user == null)
                 return GetResponse(ApiCode.WrongPassword);
             return Success(await GenerateToken(user));
@@ -46,11 +48,11 @@ namespace UserService.Controllers
         /// <returns></returns>
         private async Task<string> GenerateToken(User user)
         {
-            var dic = (await HttpHelper.Get<ApiResponse<List<DM.Dictionary>>>(ConstValue.GatewayUrl + "Dictionary/Get?Type=JwtConfig")).Data.FirstOrDefault();
-            var jwtConfig = JsonConvert.DeserializeObject<JwtConfig>(dic?.Value ?? "");
+            var jwtConfig = new JwtConfig();
+            _configuration.GetSection("Jwt").Bind(jwtConfig);
 
             //秘钥，就是标头，这里用Hmacsha256算法，需要256bit的密钥
-            var securityKey = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.Secrect)), SecurityAlgorithms.HmacSha256);
+            var securityKey = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secrect)), SecurityAlgorithms.HmacSha256);
 
             //相当于有效载荷
             var claims = new Claim[] {
