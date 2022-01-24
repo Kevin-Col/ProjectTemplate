@@ -58,7 +58,7 @@ namespace UserService.Controllers
             var claims = new Claim[] {
                 new Claim(JwtRegisteredClaimNames.Iss,jwtConfig.Iss),
                 new Claim("Guid",Guid.NewGuid().ToString("D")),
-                new Claim("Uid",user.Id.ToString()),
+                new Claim(JwtClaim.UserId,user.Id.ToString()),
                 new Claim(ClaimTypes.Role,"system"),
                 new Claim(ClaimTypes.Role,"admin"),
     };

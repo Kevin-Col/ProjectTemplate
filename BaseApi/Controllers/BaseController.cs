@@ -15,6 +15,7 @@ namespace BaseApi.Controllers
     public class BaseController : ControllerBase
     {
         [FromService] public Context _Context { get; set; }
+        [FromService] public CurrentUser _CurrentUser { get; set; }
         [FromService] public IMapper _Mapper { get; set; }
         protected ApiResponse Success() => Success("");
         protected ApiResponse Faild() => Faild("");

@@ -1,3 +1,4 @@
+using BaseApi;
 using BaseApi.Extensions;
 using BaseApi.Filter;
 using Common;
@@ -21,6 +22,9 @@ builder.Services.AddSwaggerGen();
 //Pomelo.EntityFrameworkCore.MySql(5.0.2)
 builder.Services.AddDbContext<Context>(option => option.UseMySql("server=rm-bp1gsig2xii7jj3126o.mysql.rds.aliyuncs.com;userid=sa;password=kevin888;database=test;", MySqlServerVersion.LatestSupportedServerVersion));
 builder.Services.AddAutoMapper(typeof(DtoMapProfile));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CurrentUser, CurrentUser>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
