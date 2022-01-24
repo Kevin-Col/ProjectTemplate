@@ -14,6 +14,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DM = Model.DBModel;
+using DB;
 
 namespace UserService.Controllers
 {
@@ -31,7 +32,8 @@ namespace UserService.Controllers
                 return GetResponse(ApiCode.CantEmptyLoginName);
             if (string.IsNullOrEmpty(dto.Password))
                 return GetResponse(ApiCode.CantEmptyPassword);
-            var user = await _Db.User.Where(w => !w.IsDeleted && w.LoginName == dto.LoginName && w.Password == dto.Password.MD5Encrypt(32)).FirstOrDefaultAsync();
+
+            var user = await _Db.User.Where(w => w.LoginName == dto.LoginName && w.Password == dto.Password.MD5Encrypt(32)).FirstOrDefaultAsync();
             if (user == null)
                 return GetResponse(ApiCode.WrongPassword);
             return Success(await GenerateToken(user));
